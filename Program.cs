@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pizza_Project
+namespace List_view_Project
 {
     internal static class Program
     {
@@ -16,7 +16,7 @@ namespace Pizza_Project
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenue());
+            Application.Run(new Form1());
         }
     }
 }

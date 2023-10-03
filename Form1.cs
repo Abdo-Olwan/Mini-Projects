@@ -8,297 +8,96 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pizza_Project
+namespace List_view_Project
 {
-    public partial class MainMenue : Form
+    public partial class Form1 : Form
     {
-        public MainMenue()
+        public Form1()
         {
             InitializeComponent();
-
         }
 
-        float GetSelectedSizePrice()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            if (rbSmall.Checked)
-            {
-                return Convert.ToSingle(rbSmall.Tag);
-                
-            }
-          else if (rbMedium.Checked)
-            {
-                return Convert.ToSingle(rbMedium.Tag);
-            }
-           else
-           {
-                return Convert.ToSingle(rbLarge.Tag);
-            }
-          
-     
+            listView1.Columns.Add("ID", 50);
+            listView1.Columns.Add("First Name", 200);
+            listView1.Columns.Add("Last Name", 200);
+            listView1.Columns.Add("Points", 100);
+        }
+
+        private void ClearTextBoxs()
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox4.Clear();
+        }
+
+        private void btn_Add_Click(object sender, EventArgs e)
+        {
+            ListViewItem newItem = new ListViewItem(textBox1.Text);
+            newItem.SubItems.Add(textBox4.Text);
+            newItem.SubItems.Add(textBox3.Text);
+            newItem.SubItems.Add(textBox2.Text);
+            listView1.Items.Add(newItem);
+            ClearTextBoxs();
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           
+                if(listView1.SelectedItems.Count > 0)
+                {
+                    textBox1.Text = listView1.SelectedItems[0].SubItems[0].Text;
+                    textBox4.Text = listView1.SelectedItems[0].SubItems[1].Text;
+                    textBox3.Text = listView1.SelectedItems[0].SubItems[2].Text;
+                    textBox2.Text = listView1.SelectedItems[0].SubItems[3].Text;
+                }
+            
            
         }
 
-        float GetSelectedCrustPrice()
+        private void btn_Add_Five_Items_Click(object sender, EventArgs e)
         {
-            if (rbThickCrust.Checked)
+            for(int item = 0; item < 5; item++)
             {
-                return Convert.ToSingle(rbThickCrust.Tag);
+                ListViewItem newItem = new ListViewItem(item.ToString());
+                newItem.SubItems.Add("Person " + item + 1);
+                newItem.SubItems.Add("father " + item + 1);
+                newItem.SubItems.Add((item + 2.9).ToString());
+                listView1.Items.Add(newItem);
             }
-            else
-            {
-                return Convert.ToSingle(rbThinCrust.Tag);
-            }
-        }
-
-        float CalculateToppingsPrice()
-        {
-            float ToppingPrice = 0;
-            if(chkExtraChees.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkExtraChees.Tag);
-            }
-            if (chkOnion.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkOnion.Tag);
-            }
-            if (chkMushrooms.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkMushrooms.Tag);
-            }
-            if (chkOlives.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkOlives.Tag);
-            }
-            if (chkTommatos.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkTommatos.Tag);
-            }
-            if (chkGreenPeppers.Checked)
-            {
-                ToppingPrice += Convert.ToSingle(chkGreenPeppers.Tag);
-            }
-
-            return ToppingPrice;
-        }
-
-
-        float CalculateTotalPrice()
-        {
-            return GetSelectedCrustPrice() + GetSelectedSizePrice() + CalculateToppingsPrice();
-        }
-
-
-        void UpdateTotalPrice()
-        {
-            lblTotalPrice.Text = "$" + CalculateTotalPrice().ToString();
-        }
-
-        void UpdateSize()
-        {
-            UpdateTotalPrice();
-            if(rbSmall.Checked)
-            {
-                lblSize.Text = "Small.";
-            }else if (rbLarge.Checked)
-            {
-                lblSize.Text = "Large.";
-            }else { lblSize.Text = "Medium.";
-            }
-        }
-
-        void UpdateCrust()
-        {
-            UpdateTotalPrice();
-            if(rbThickCrust.Checked)
-            {
-                lblCrustType.Text = "Thick Crust.";
-            }
-            else
-            {
-                lblCrustType.Text = "Thin Crust.";
-            }
-        }
-
-        void UpdateToppings()
-        {
-            UpdateTotalPrice();
-            string Toppings = "";
-            string Spc = " ";
-            if(chkExtraChees.Checked)
-            {
-                Toppings += chkExtraChees.Text;
-            }
-
-            if (chkOnion.Checked)
-            {
-                Toppings += Spc + chkOnion.Text;
-            }
-
-            if (chkMushrooms.Checked) 
-            {
-                Toppings += Spc + chkMushrooms.Text;
-            }
-
-            if (chkOlives.Checked)
-            {
-                Toppings += Spc + chkOlives.Text;
-            }
-
-            if (chkTommatos.Checked)
-            {
-                Toppings += Spc + chkTommatos.Text;
-            }
-
-            if (chkGreenPeppers.Checked)
-            {
-                Toppings += Spc + chkGreenPeppers.Text;
-            }
-
-            if (Toppings == "")
-            {
-                Toppings = "No Toppings";
-            }
-
-           // lblToppings.Text = Toppings;
-            txtToppings.Text = Toppings;
-
-        }
-
-        void UpdateWhereToEat()
-        {
-            if(rbEatIn.Checked)
-            {
-                lblWhereToEat.Text = rbEatIn.Text;
-                return;
-            }
-            if (rbTakeOut.Checked)
-            {
-                lblWhereToEat.Text = rbTakeOut.Text;
-                return;
-            }
-        }
-
-        void ResetForm()
-        {
-            // Reset Size 
-            gpxSize.Enabled = true;
-            rbSmall.Checked = true;
-
-            // Reset Crust
-            gpCrust.Enabled = true;
-            rbThinCrust.Checked = true;
-
-            //Reset Toppings
-            gpToppings.Enabled = true;
-            chkExtraChees.Checked = false;
-            chkMushrooms.Checked = false;   
-            chkOlives.Checked = false;
-            chkTommatos.Checked = false;
-            chkGreenPeppers.Checked = false;
-            chkOnion.Checked = false;
-
-
-            gpWhereToEat.Enabled = true;
-            btnOrderPizza.Enabled = true;
-        }
-
-        private void MainMenue_Load(object sender, EventArgs e)
-        {
-            rbSmall.Checked = true;
-            rbThickCrust.Checked = true;    
-            rbTakeOut.Checked = true;
-        }
-
- 
-
-        private void btnOrderPizza_Click(object sender, EventArgs e)
-        {
-            if(MessageBox.Show("Confirm Order", "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Question)
-                == DialogResult.OK)
-            {
-                MessageBox.Show("Orderd Placed Successfully", "Success", MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
           
-            gpxSize.Enabled = false;
-            gpCrust.Enabled = false;
-            gpToppings.Enabled = false;
-            gpWhereToEat.Enabled = false;
-            btnOrderPizza.Enabled = false;
+        }
+
+        private void btn_Update_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                  listView1.SelectedItems[0].SubItems[0].Text = textBox1.Text;
+                  listView1.SelectedItems[0].SubItems[1].Text = textBox4.Text;
+                  listView1.SelectedItems[0].SubItems[2].Text = textBox3.Text;
+                  listView1.SelectedItems[0].SubItems[3].Text = textBox2.Text;
             }
+            ClearTextBoxs();
+
         }
 
-        private void btnResetForm_Click(object sender, EventArgs e)
+        private void btn_Remove_Item_Click(object sender, EventArgs e)
         {
-            ResetForm();
+            if (listView1.SelectedItems.Count > 0)
+            {
+                listView1.Items.Remove(listView1.SelectedItems[0]);
+            }
+            ClearTextBoxs();
+
+        }
+
+        private void btn_Clear_List_Click(object sender, EventArgs e)
+        {
           
-
+                listView1.Items.Clear();
+            
         }
-
-        private void rbSmall_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSize();
-        }
-
-        private void rbMedium_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSize();
-        }
-
-        private void rbLarge_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateSize();
-        }
-
-        private void rbThinCrust_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateCrust();
-        }
-
-        private void rbThickCrust_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateCrust();
-        }
-
-        private void chkExtraChees_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings();
-        }
-
-        private void chkMushrooms_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings();
-        }
-
-        private void chkTommatos_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings(); ;
-        }
-
-        private void chkOnion_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings();
-        }
-
-        private void chkOlives_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings();
-        }
-
-        private void chkGreenPeppers_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateToppings();
-        }
-
-        private void rbEatIn_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateWhereToEat();
-        }
-
-        private void rbTakeOut_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateWhereToEat();
-        }
-
-
     }
 }
